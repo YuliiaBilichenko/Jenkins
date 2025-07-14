@@ -1,0 +1,703 @@
+{
+	"info": {
+		"_postman_id": "fdf83589-b415-487a-8a9f-a7b7ef0810f5",
+		"name": "Test Runner",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38845033"
+	},
+	"item": [
+		{
+			"name": "signUp_validation_name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let testData = [\r",
+							"    \"\", \r",
+							"    \"J\", \r",
+							"    \"Jqwertdghyujikmnbvfrt\",\r",
+							"    \"Кр\", \r",
+							"    \"Jy12\",\r",
+							"    \"Josy-Mary\" \r",
+							"];\r",
+							"\r",
+							"let index = pm.collectionVariables.get(\"testIndex\") || 0;\r",
+							"index = parseInt(index);\r",
+							"\r",
+							"pm.collectionVariables.set(\"userName\", testData[index]);\r",
+							"pm.collectionVariables.set(\"testDataLength\", testData.length);\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let name = pm.collectionVariables.get(\"userName\");\r",
+							"let res = pm.response.json();\r",
+							"let index = parseInt(pm.collectionVariables.get(\"testIndex\")) || 0;\r",
+							"let totalLength = parseInt(pm.collectionVariables.get(\"testDataLength\")) || 0;\r",
+							"\r",
+							"\r",
+							"if (name === \"\") {\r",
+							"    pm.test(\"Name is required\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Name is required\");\r",
+							"    });\r",
+							"} else if (name.length < 2) {\r",
+							"    pm.test(\"Name too short\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Name has to be from 2 to 20 characters long\");\r",
+							"    });\r",
+							"} else if (name.length > 20) {\r",
+							"    pm.test(\"Name too long\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Name has to be from 2 to 20 characters long\");\r",
+							"    });\r",
+							"} else if (name === \"Кр\") {\r",
+							"    pm.test(\"Name has Cyrillic letters\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Name is invalid\");\r",
+							"    });\r",
+							"} else if (name === \"Jy12\") {\r",
+							"    pm.test(\"Name has number\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Name is invalid\");\r",
+							"    });\r",
+							"} else if (name === \"Josy-Mary\") {\r",
+							"    pm.test(\"Name has special symbol\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Name is invalid\");\r",
+							"    });\r",
+							"} else {\r",
+							"    pm.test(\"Name accepted\", function () {\r",
+							"        pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if (index < totalLength - 1) {\r",
+							"    pm.collectionVariables.set(\"testIndex\", index + 1);\r",
+							"    postman.setNextRequest(pm.info.requestName); // Запускаємо знову цей самий запит\r",
+							"} else {\r",
+							"    pm.collectionVariables.unset(\"testIndex\");\r",
+							"    console.log(\"✅ Усі варіанти імен протестовано.\");\r",
+							"     // Зупиняємо цикл\r",
+							"}\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{userName}}\",\r\n  \"lastName\": \"Dou\",\r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"Qwerty12345\",\r\n  \"repeatPassword\": \"Qwerty12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "signUp_validation_last_name",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let testData = [\r",
+							"    \"\", \r",
+							"    \"D\", \r",
+							"    \"Douyujgtfredvvswpuhyr\",\r",
+							"    \"Каппа\", \r",
+							"    \"Dou123\",\r",
+							"    \"Dou-Re\" \r",
+							"];\r",
+							"\r",
+							"let index = pm.collectionVariables.get(\"testIndex\") || 1;\r",
+							"index = parseInt(index);\r",
+							"console.log(index);\r",
+							"console.log(testData[index]);\r",
+							"\r",
+							"pm.collectionVariables.set(\"testIndex\", index);\r",
+							"\r",
+							"\r",
+							"pm.collectionVariables.set(\"userLastName\", testData[index-1]);\r",
+							"pm.collectionVariables.set(\"testDataLength\", testData.length); \r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let lastName = pm.collectionVariables.get(\"userLastName\");\r",
+							"let res = pm.response.json();\r",
+							"let index = parseInt(pm.collectionVariables.get(\"testIndex\"));\r",
+							"let totalLength = parseInt(pm.collectionVariables.get(\"testDataLength\"));\r",
+							"\r",
+							"if (lastName === \"\") {\r",
+							"    pm.test(\"Last name is required\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Last Name is required\");\r",
+							"    });\r",
+							"} else if (lastName.length < 2) {\r",
+							"    pm.test(\"Last name too short\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Last Name has to be from 2 to 20 characters long\");\r",
+							"    });\r",
+							"} else if (lastName.length > 20) {\r",
+							"    pm.test(\"Last name too long\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Last Name has to be from 2 to 20 characters long\");\r",
+							"    });\r",
+							"} else if (lastName === \"Каппа\") {\r",
+							"    pm.test(\"Last name has Cyrillic letters\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Last Name is invalid\");\r",
+							"    });\r",
+							"} else if (lastName === \"Dou123\") {\r",
+							"    pm.test(\"Last name has number\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Last Name is invalid\");\r",
+							"    });\r",
+							"} else if (lastName === \"Dou-Re\") {\r",
+							"    pm.test(\"Last name has special symbol\", function () {\r",
+							"        pm.expect(res.message).to.include(\"Last Name is invalid\");\r",
+							"    });\r",
+							"} else {\r",
+							"    pm.test(\"Last name accepted\", function () {\r",
+							"        pm.expect(pm.response.code).to.be.oneOf([200, 201]);\r",
+							"    });\r",
+							"}\r",
+							"if (index < totalLength) {\r",
+							"    pm.collectionVariables.set(\"testIndex\", index + 1); \r",
+							"postman.setNextRequest(pm.info.requestName); // Запускаємо знову цей самий запит\r",
+							"pm.execution.setNextRequest(\"signUp_validation_last_name\");\r",
+							"} else {\r",
+							"    pm.collectionVariables.unset(\"testIndex\");\r",
+							"    console.log(\"✅ Усі варіанти імен протестовано.\");\r",
+							"     // Зупиняємо цикл\r",
+							"} "
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Js\",\r\n  \"lastName\": \"{{userLastName}}\",\r\n  \"email\": \"test@test.com\",\r\n  \"password\": \"Qwerty12345\",\r\n  \"repeatPassword\": \"Qwerty12345\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let Email = pm.collectionVariables.replaceIn(\"{{$randomEmail}}\");\r",
+							"console.log(pm.collectionVariables.replaceIn(\"{{$randomEmail}}\"));\r",
+							"pm.collectionVariables.set('randomEmail', Email);\r",
+							"\r",
+							"pm.test('Email is valid', function(){\r",
+							"    pm.expect(tv4.validate(pm.response, Email)).to.be.true;\r",
+							"})\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let body = pm.response.json();\r",
+							"pm.collectionVariables.set('userId', body.data.userId);\r",
+							"pm.collectionVariables.set(\"date\", body.data.userCreatedAt)\r",
+							"\r",
+							"var schema = {\r",
+							"    \"type\":\"object\",\r",
+							"    \"properties\":{\r",
+							"    \"name\": {\r",
+							"        \"type\": \"string\"},\r",
+							"    \"lastName\": {\r",
+							"        \"type\": \"string\"},\r",
+							"    \"email\": {\r",
+							"        \"type\": \"string\"},\r",
+							"  \"password\": {\r",
+							"    \"type\": \"string\"},\r",
+							"  \"repeatPassword\":{\r",
+							"    \"type\": \"string\"}\r",
+							"  }\r",
+							"}\r",
+							"pm.test('schema is valid', function(){\r",
+							"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{randomFirstName}}\",\r\n  \"lastName\": \"{{randomLastName}}\",\r\n  \"email\": \"{{randomEmail}}\",\r\n  \"password\": \"{{oldPassword}}\",\r\n  \"repeatPassword\": \"{{oldPassword}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signup",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit_user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let FirstName = pm.collectionVariables.replaceIn(\"{{$randomFirstName}}\");\r",
+							"console.log(pm.collectionVariables.replaceIn(\"{{$randomFirstName}}\"));\r",
+							"pm.collectionVariables.set('randomFirstName', FirstName);\r",
+							"\r",
+							"let LastName = pm.collectionVariables.replaceIn(\"{{$randomLastName}}\");\r",
+							"console.log(pm.collectionVariables.replaceIn(\"{{$randomLastName}}\"));\r",
+							"pm.collectionVariables.set('randomLastName', LastName);\r",
+							"\r",
+							"let Country = pm.collectionVariables.replaceIn(\"{{$randomCountry}}\");\r",
+							"console.log(pm.collectionVariables.replaceIn(\"{{$randomCountry}}\"));\r",
+							"pm.collectionVariables.set('randomCountry', Country);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let requestBody = JSON.parse(request.data);\r",
+							"\r",
+							"let responseBody = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response matches request body\", function () {\r",
+							"    for (let key in requestBody) {\r",
+							"        pm.expect(responseBody[key]).to.eql(requestBody[key]);\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"const response = pm.response.json();\r",
+							"const value = response.data.dateBirth;\r",
+							"const datePart = value.substring(0, 10);\r",
+							"const regex = /^\\d{4}-\\d{2}-\\d{2}$/;\r",
+							"pm.test(\"Field has format YYYY-MM-DD\", function () {\r",
+							"    pm.expect(datePart).to.match(regex);\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"photo\": \"user-1621352948859.jpg\",\r\n  \"name\": \"{{randomFirstName}}\",\r\n  \"lastName\": \"{{randomLastName}}\",\r\n  \"dateBirth\": \"2025-03-17T15:21:05.000Z\",\r\n  \"country\": \"Canada\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/profile",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change_password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseText = pm.response.json();;\r",
+							"let userId = pm.collectionVariables.get('userId')\r",
+							"pm.test(\"userId corresponds to the Id of the created user\", function () {\r",
+							"    pm.expect(responseText.data.userId).to.eql(userId);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"oldPassword\": \"{{oldPassword}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"repeatPassword\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/users/password",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users",
+						"password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status('OK');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{randomEmail}}\",\r\n  \"password\": \"{{password}}\",\r\n  \"remember\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_car",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let body = pm.response.json();\r",
+							"pm.collectionVariables.set('carId', body.data.id);\r",
+							"pm.collectionVariables.set(\"date\", body.data.carCreatedAt)\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status('Created');\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carBrandId\": 1,\r\n  \"carModelId\": 2,\r\n  \"mileage\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/cars",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cars"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "crete_expenses",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let lastExpense = Number(pm.collectionVariables.get('lastExpense')) || 0;\r",
+							"let newExpense = lastExpense + 10;\r",
+							"pm.collectionVariables.set('lastExpense', newExpense);\r",
+							"console.log(\"New Expense:\", newExpense);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"carId\":{{carId}},\r\n  \"reportedAt\": \"{{date}}\",\r\n  \"mileage\": {{lastExpense}},\r\n  \"liters\": 10,\r\n  \"totalCost\": 11,\r\n  \"forceMileage\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/expenses",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"expenses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/users",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "userLastName",
+			"value": ""
+		},
+		{
+			"key": "testDataLength",
+			"value": ""
+		},
+		{
+			"key": "userName",
+			"value": ""
+		},
+		{
+			"key": "randomEmail",
+			"value": ""
+		},
+		{
+			"key": "randomFirstName",
+			"value": ""
+		},
+		{
+			"key": "randomLastName",
+			"value": ""
+		},
+		{
+			"key": "randomCountry",
+			"value": ""
+		},
+		{
+			"key": "oldPassword",
+			"value": "Qweas12345",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": ""
+		},
+		{
+			"key": "date",
+			"value": ""
+		},
+		{
+			"key": "password",
+			"value": "12345Qweas",
+			"type": "string"
+		},
+		{
+			"key": "carId",
+			"value": ""
+		},
+		{
+			"key": "lastExpense",
+			"value": ""
+		}
+	]
+}
