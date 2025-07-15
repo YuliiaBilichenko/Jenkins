@@ -1,0 +1,5 @@
+{
+  "carBrandId": 1,
+  "carModelId": 2,
+  "mileage": 10
+}

@@ -1,0 +1,5 @@
+{
+  "oldPassword": "Qweas12345",
+  "password": "12345Qweas",
+  "repeatPassword": "12345Qweas"
+}

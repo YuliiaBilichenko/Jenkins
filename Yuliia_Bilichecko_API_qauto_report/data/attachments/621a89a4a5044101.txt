@@ -1,0 +1,3 @@
+level: log, messages: Shania
+level: log, messages: Feest
+level: log, messages: Germany

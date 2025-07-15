@@ -1,0 +1,8 @@
+{
+  "carId":,
+  "reportedAt": "",
+  "mileage": 10,
+  "liters": 10,
+  "totalCost": 11,
+  "forceMileage": false
+}

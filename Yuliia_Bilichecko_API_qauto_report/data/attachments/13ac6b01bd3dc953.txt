@@ -1,0 +1,7 @@
+{
+  "photo": "user-1621352948859.jpg",
+  "name": "Alberto",
+  "lastName": "Bayer",
+  "dateBirth": "2025-03-17T15:21:05.000Z",
+  "country": "Canada"
+}

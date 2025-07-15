@@ -1,0 +1,7 @@
+{
+  "name": "Js",
+  "lastName": "D",
+  "email": "test@test.com",
+  "password": "Qwerty12345",
+  "repeatPassword": "Qwerty12345"
+}
